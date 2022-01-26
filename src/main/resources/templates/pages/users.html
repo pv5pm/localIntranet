@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+
+    <title>Title</title>
+</head>
+<body>
+<th:block th:fragment="main">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Users</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item active">Users</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-user"></i> Users</h3>
+
+                    <div class="card-tools">
+                        <button th:if="${loggedUserDetails.enabled!=false}" type="button" data-toggle="modal" data-target="#newuser" class="btn btn-info" >
+                            <i class="fas fa-user-plus"></i> New User</button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table m-0">
+                            <thead>
+                            <th></th>
+                            <th>User</th>
+                            <th>email</th>
+                            <th>first name</th>
+                            <th>last name</th>
+                            <th>mobile</th>
+                            <th>role</th>
+                            <th>enabled</th>
+
+                            </thead>
+                            <tbody>
+                            <tr th:each="user: ${users}">
+                                <td>
+                                    <div th:if="${loggedUserDetails.enabled!=false}" class="btn-group">
+                                        <button th:data-enabled="${user.enabled}" th:data-username="${user.userName}" th:data-role="${user.role}" th:data-firstname="${user.firstName}" th:data-lastname="${user.lastName}" th:data-email="${user.email}" th:data-mobile="${user.mobile}"  type="button" onclick="edituser(this)" th:data-id="${user.id}"  title="edit" class="btn btn-info"><i class="far fa-edit"></i></button>
+                                        <button th:data-username="${user.userName}" type="button" onclick="resetpassword(this)" title="reset password" th:data-id="${user.id}" class="btn btn-success"><i class="fas fa-user-lock"></i></button>
+                                        <button th:if="${user.enabled!=false}" th:data-username="${user.userName}" type="button" onclick="deleteuser(this)" title="delete" th:data-id="${user.id}" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                                <td th:utext="@{|<image src='${user.avatar}' class='img-circle img-size-32 mr-2' />${user.userName}|}"></td>
+                                <td th:text="${user.email}"></td>
+                                <td th:text="${user.firstName}"></td>
+                                <td th:text="${user.lastName}"></td>
+                                <td th:text="${user.mobile}"></td>
+                                <td th:text="${user.role}"></td>
+                                <td th:text="${user.enabled?'Yes':'No'}"></td>
+
+
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="7"></td>
+                                <td >
+                                    <ul class="pagination pagination-sm">
+
+                                        <li class="page-item"><a   class="page-link">«</a></li>
+                                        <li class="page-item"><a  class="page-link">»</a></li>
+
+                                    </ul>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- modal section -->
+    <div class="modal fade" id="newuser" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><i class="fas fa-user"></i> New user</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form th:action="@{/new/user}" method="post">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="newusername">Username</label>
+                        <input type="text" class="form-control" id="newusername" name="userName" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newfirstname">First Name</label>
+                        <input type="text" class="form-control" id="newfirstname" name="firstName" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newlastname">Last Name</label>
+                        <input type="text" class="form-control" id="newlastname" name="lastName" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newemail">Email</label>
+                        <input type="text" class="form-control" id="newemail" name="email" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newmobile">Mobile</label>
+                        <input type="text" class="form-control" id="newmobile" name="mobile" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newavatar">Avatar</label>
+                        <select id="newavatar" class="form-control" name="avatar" >
+                            <option value="/img/avatar.png">Avatar (Men)</option>
+                            <option value="/img/avatar2.png">Avatar2 (Woman)</option>
+                            <option value="/img/avatar3.png">Avatar3 (Woman)</option>
+                            <option value="/img/avatar04.png">Avatar4 (Men)</option>
+                            <option value="/img/avatar5.png">Avatar5 (Men)</option>
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newrole">Role</label>
+                        <select id="newrole" class="form-control" name="role" >
+                            <option value="admin">Admin</option>
+                            <option value="user">User</option>
+                        </select>
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save changes</button>
+                </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal fade" id="edituser" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><i class="fas fa-user"></i> Edit User - <span id="editusername"></span></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form th:action="@{/edit/user}" method="post">
+
+
+                <div class="modal-body">
+                    <input id="editId" name="id" type="hidden" />
+
+                    <div class="form-group">
+                        <label for="editfirstname">First Name</label>
+                        <input type="text" class="form-control" id="editfirstname" name="firstName" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editlastname">Last Name</label>
+                        <input type="text" class="form-control" id="editlastname" name="lastName" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editemail">Email</label>
+                        <input type="text" class="form-control" id="editemail" name="email" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editmobile">Mobile</label>
+                        <input type="text" class="form-control" id="editmobile" name="mobile" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editrole">Role</label>
+                        <select id="editrole" class="form-control" name="role" >
+                            <option value="admin">Admin</option>
+                            <option value="user">User</option>
+                        </select>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" id="editenabled" class="form-check-input" name="enabled">
+                        <label class="form-check-label" for="editenabled">Eanbled</label>
+                    </div>
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save changes</button>
+                </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal fade" id="deleteuser" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><i class="fas fa-user"></i> Delete user - <span id="deleteusername"></span></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form th:action="@{/delete/user}" method="post">
+                <div class="modal-body">
+                    <input id="deleteId" name="id" type="hidden" />
+                    <p>Are you sure?</p>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+                </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
+
+
+</th:block>
+
+<th:block th:fragment="style">
+    <!-- Page style Here  -->
+</th:block>
+
+
+<th:block th:fragment="script">
+    <!-- Page scripts Here  -->
+    <script type="text/javascript">
+
+        function edituser(e)
+        {
+            $('#editId').val($(e).data("id"));
+            $('#editemail').val($(e).data('email'));
+            $('#editfirstname').val($(e).data('firstname'));
+            $('#editlastname').val($(e).data('lastname'));
+            $('#editmobile').val($(e).data('mobile'));
+            $('#editrole').val($(e).data('role'));
+            $('#editrole').trigger('change');
+
+            if($(e).data('enabled')==true){
+                $('#editenabled').prop('checked', true );
+            }
+            else
+            {
+                $('#editenabled').prop('checked', false );
+            }
+
+            $('#editusername').html($(e).data('username'));
+
+            $('#edituser').modal('show');
+        }
+
+        function deleteuser(e)
+        {
+           $('#deleteId').val($(e).data("id"));
+            $('#deleteusername').html($(e).data('username'));
+           $('#deleteuser').modal('show');
+        }
+
+    </script>
+</th:block>
+</body>
+</html>

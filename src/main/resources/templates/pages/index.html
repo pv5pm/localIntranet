@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+
+    <title>Title</title>
+</head>
+<body>
+<th:block th:fragment="main">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1> Dashboard</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card card-primary card-outline">
+                            <div class="card-body box-profile">
+                                <div class="text-center">
+                                    <img class="profile-user-img img-fluid img-circle" th:src="${loggedUserDetails.avatar}" alt="User profile picture">
+                                </div>
+
+                                <h3 th:text="@{|${loggedUserDetails.firstName} ${loggedUserDetails.lastName}|}" class="profile-username text-center"></h3>
+
+                                <a href="javascript:;" data-toggle="modal" data-target="#changeavatar"  class=" text-muted text-center">Change Avatar</a>
+
+                                <ul class="list-group list-group-unbordered mb-3">
+                                    <li class="list-group-item">
+                                        <b>Articles</b> <a th:text="${articlescount}" class="float-right"></a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Comments</b> <a th:text="${commentsCount}" class="float-right"></a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Reviews</b> <a th:text="${rankingcount}" class="float-right">1</a>
+                                    </li>
+                                </ul>
+
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+
+
+                        <!-- Default box -->
+                        <div th:if="${latestreviews.size()>0}" class="card card-outline card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="far fa-bar-chart"></i> Recent reviews received</h3>
+
+
+                            </div>
+                            <div  class="card-body p-0">
+                                <ul th:each="review: ${latestreviews}" class="products-list product-list-in-card pl-2 pr-2">
+                                    <li class="item">
+                                        <a th:href="@{|/details/article/${review.id}|}">
+                                        <div class="product-img">
+                                            <img th:src="${review.author.avatar}" alt="author" th:title="${review.author.userName}" class="img-size-50">
+                                        </div>
+                                        <div class="product-info">
+                                            <span th:text="${review.category.categoryName}"  class="product-title">
+                                                <span th:text="${review.avgRate}" class="badge badge-info float-right"></span></span>
+                                            <span th:text="${review.title}" class="product-description">
+
+                                           </span>
+                                        </div>
+                                        </a>
+                                    </li>
+                                    <!-- /.item -->
+
+
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <!-- /.card -->
+                    </div>
+                    <div class="col-md-9">
+                        <!-- Default box -->
+                        <div th:if="${articlestoreview.size()>0}"  class="card card-outline card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="far fa-bar-chart"></i> Articles to review</h3>
+                            </div>
+                            <div class="card-body p-0">
+                                <ul th:each="article: ${articlestoreview}" class="products-list product-list-in-card pl-2 pr-2">
+                                    <li class="item">
+                                        <a th:href="@{|/details/article/${article.id}|}">
+                                            <div class="product-img">
+                                                <img th:src="${article.author.avatar}" alt="author" th:title="${article.author.userName}" class="img-size-50">
+                                            </div>
+                                            <div class="product-info">
+                                            <span th:text="${article.category.categoryName}"  class="product-title">
+                                                <span th:text="${article.avgRate}" class="badge badge-info float-right"></span></span>
+                                                <span th:text="${article.title}" class="product-description">
+
+                                           </span>
+
+
+                                            </div>
+                                        </a>
+                                        <div style="height:30px!important;overflow:hidden;margin-top:10px" th:utext="${article.description}">
+
+                                        </div>
+                                    </li>
+                                    <!-- /.item -->
+
+
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <!-- /.card -->
+
+                        <!-- Default box -->
+                        <div th:if="${myrecentarticles.size()>0}" class="card card-outline card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="far fa-bar-chart"></i> My recent articles  </h3>
+
+
+                            </div>
+                            <div class="card-body p-0">
+                                <ul th:each="myarticle: ${myrecentarticles}" class="products-list product-list-in-card pl-2 pr-2">
+                                    <li class="item">
+                                        <a th:href="@{|/details/article/${myarticle.id}|}">
+                                            <div class="product-img">
+                                                <img th:src="${myarticle.author.avatar}" alt="author" th:title="${myarticle.author.userName}" class="img-size-50">
+                                            </div>
+                                            <div class="product-info">
+                                            <span th:text="${myarticle.category.categoryName}"  class="product-title">
+                                                <span th:text="${myarticle.avgRate}" class="badge badge-info float-right"></span></span>
+                                                <span th:text="${myarticle.title}" class="product-description">
+
+                                           </span>
+
+
+                                            </div>
+                                        </a>
+                                        <div style="height:30px!important;overflow:hidden;margin-top:10px" th:utext="${myarticle.description}">
+
+                                        </div>
+                                    </li>
+                                    <!-- /.item -->
+
+
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <!-- /.card -->
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- modal section -->
+    <div class="modal fade" id="changeavatar" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><i class="fas fa-user-tag"></i>Change avatar</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form th:action="@{/users/change/avatar}" method="post"  enctype="multipart/form-data">
+                    <div class="modal-body">
+
+                        <div class="custom-file">
+                            <input type="file" name="file" class="custom-file-input" id="file">
+                            <label class="custom-file-label" for="file">Choose avatar</label>
+                        </div>
+
+
+                    </div>
+
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save changes</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
+</th:block>
+
+<th:block th:fragment="style">
+    <!-- Page style Here  -->
+</th:block>
+
+<th:block th:fragment="script">
+    <!-- Page scripts Here  -->
+    <script th:src="@{/plugins/bs-custom-file-input/bs-custom-file-input.min.js}"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            bsCustomFileInput.init();
+        });
+
+    </script>
+
+</th:block>
+
+</html>

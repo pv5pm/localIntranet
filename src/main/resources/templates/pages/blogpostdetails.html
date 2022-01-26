@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<th:block th:fragment="main">
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Articles</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{|/list/category/${article.category.id}|}">Category</a></li>
+                            <li class="breadcrumb-item active">Articles</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <section class="content">
+<div class="card card-outline card-primary">
+    <div class="card-header">
+        <div class="user-block">
+            <img class="img-circle" th:src="${article.author.avatar}" alt="User Image">
+            <span class="username"><a th:text="${article.author.userName}" href="javascript:;"></a></span>
+            <span th:text="@{|Shared publicly - ${article.dateCreated.toLocalDate()} ${article.dateCreated.toLocalTime()} |}" class="description"></span>
+        </div>
+        <!-- /.user-block -->
+        <div class="card-tools">
+
+        </div>
+        <!-- /.card-tools -->
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+
+        <a th:text="${article.title}" th:href="${article.website}==''?'javascript:;':@{|${article.website}|}" target="_blank"></a>
+        <!-- post text -->
+        <p style="height-max:100px;overflow:hidden" th:utext="${article.description}"></p>
+        <a th:if="${article.author.userName==loggedUserDetails.userName && loggedUserDetails.enabled!=false}"  th:href="@{|/edit/article/${article.id}|}" class="btn btn-info btn-sm"><i class="far fa-edit"></i> Edit</a>
+        <a th:if="${loggedUserDetails.enabled!=false}" th:href="@{|/rate/article/${article.Id}|}" class="btn btn-info btn-sm"><i class="fab fa-gratipay"></i> Rate</a>
+        <span  class="float-right text-muted"> <span class="badge badge-info" th:text="@{|Rating ${article.avgRate}|}"></span>  - <span th:text="${article.comments.size()}"></span>  comments</span>
+    </div>
+    <!-- /.card-body -->
+    <div  class="card-footer card-comments">
+        <div th:each="comment : ${article.comments}" class="card-comment">
+            <!-- User image -->
+            <img class="img-circle img-sm" th:src="${comment.author.avatar}" alt="User Image">
+
+            <div class="comment-text">
+                    <span th:text="@{|${comment.author.userName} - ${comment.dateCreated.toLocalDate()} ${comment.dateCreated.toLocalTime()}|}" class="username">
+
+
+
+                    </span><!-- /.username -->
+
+                <span th:text="${comment.commentText}">
+
+                </span>
+
+            </div>
+            <!-- /.comment-text -->
+        </div>
+
+        <form th:if="${loggedUserDetails.enabled!=false}" th:action="@{/comments/add}" method="post">
+            <img class="img-fluid img-circle img-sm" th:src="${loggedUserDetails.avatar}" alt="Alt Text">
+            <!-- .img-push is used to add margin to elements next to floating images -->
+            <div class="img-push">
+                <input type="hidden" name="blogId" th:value="${article.id}" />
+
+                <div class="input-group input-group-sm">
+                    <input type="text" name="commentText" class="form-control">
+                    <span class="input-group-append">
+                    <button type="submit" class="btn btn-primary btn-flat">Add</button>
+                  </span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+        </section>
+    </div>
+
+
+</th:block>
+
+<th:block th:fragment="style">
+    <!-- Page style Here  -->
+</th:block>
+
+<th:block th:fragment="script">
+
+</th:block>
+</body>
+</html>
