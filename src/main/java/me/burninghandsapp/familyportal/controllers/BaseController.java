@@ -1,5 +1,6 @@
 package me.burninghandsapp.familyportal.controllers;
 
+import com.sun.security.auth.UserPrincipal;
 import me.burninghandsapp.familyportal.modeldto.UserDto;
 import me.burninghandsapp.familyportal.modelview.UserView;
 import me.burninghandsapp.familyportal.repositories.CategoriesRepository;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 @Controller
@@ -54,8 +57,7 @@ public class BaseController {
 
         if (!loginUserName.isBlank()) {
 
-            loginUserName = loginUserName.split(":")[1];
-            loginUserName = loginUserName.replace("[","").replace("]","").trim();
+
            var loginUserEntity = userRepository.getUserByUsername(loginUserName);
             mapper.map(loginUserEntity, loginUser);
         }
@@ -91,8 +93,11 @@ public class BaseController {
     public String[] getUserName()
     {
         try{
-            var principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            return principal.toString().split(",");
+            org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser principal =(org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+
+            var userValues = principal.getPreferredUsername()+","+principal.getName();
+            return userValues.split(",");
         }
         catch (Exception ex)
         {
