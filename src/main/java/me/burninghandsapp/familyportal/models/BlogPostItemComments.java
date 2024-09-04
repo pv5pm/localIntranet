@@ -3,7 +3,7 @@ package me.burninghandsapp.familyportal.models;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 public class BlogPostItemComments implements Serializable {
 
-    @javax.persistence.Id
+    @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private  int id;
 

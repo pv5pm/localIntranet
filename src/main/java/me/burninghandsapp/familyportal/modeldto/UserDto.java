@@ -5,7 +5,7 @@ import lombok.Setter;
 import me.burninghandsapp.familyportal.models.User;
 import org.modelmapper.ModelMapper;
 
-import javax.persistence.criteria.CriteriaBuilder;
+
 import java.io.Serializable;
 
 @Getter

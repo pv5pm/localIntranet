@@ -46,7 +46,7 @@ public class RateController extends  BaseController {
         var rateobj = new BlogPostRatingsDto();
         if(rateCount == 0)
         {
-            var blogItem = blogPostItemsRepository.getOne(id);
+            var blogItem = blogPostItemsRepository.findOneById(id);
             var blogDto = new BlogPostItemsDto();
             mapper.map(blogItem,blogDto);
             rateobj.setBlogItem(blogDto);

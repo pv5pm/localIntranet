@@ -46,7 +46,7 @@ public class CategoryController extends  BaseController {
     {
 
         getBaseModel(model,CATEGORY_PAGE,2);
-        var category = categoryRepository.getOne(id);
+        var category = categoryRepository.findById(id);
         model.addAttribute("category",category);
 
         model.addAttribute("a2",id);
