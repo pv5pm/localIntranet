@@ -78,7 +78,7 @@
                     <img th:src="${loggedUserDetails.avatar}" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="/" th:text="${#httpServletRequest.remoteUser}" class="d-block"></a>
+                    <a href="/" th:text="${loggedUserDetails.userName}" class="d-block"></a>
                 </div>
             </div>
 
