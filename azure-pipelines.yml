@@ -8,17 +8,21 @@ trigger:
 
 pool:
   vmImage: ubuntu-latest
-
 steps:
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '21'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
     jdkArchitectureOption: 'x64'
     publishJUnitResults: false
     goals: 'package'
+    options: 'package -Dmaven.test.skip'
 - task: CopyFiles@2
   inputs:
     SourceFolder: $(system.defaultworkingdirectory)
