@@ -46,7 +46,7 @@ public class CategoryController extends  BaseController {
     {
 
         getBaseModel(model,CATEGORY_PAGE,2);
-        var category = categoryRepository.findById(id);
+        var category = categoryRepository.findCategoryById(id);
         model.addAttribute("category",category);
 
         model.addAttribute("a2",id);
@@ -79,13 +79,13 @@ public class CategoryController extends  BaseController {
     @PostMapping("/edit/category")
     public RedirectView editCategory(String categoryName,String categoryDescription,Integer id)
     {
-        var objectCategory = categoryRepository.findById(id);
-        if(objectCategory.isPresent())
+        var objectCategory = categoryRepository.findCategoryById(id);
+        if(objectCategory!=null)
         {
-            var category = objectCategory.get();
-            category.setCategoryName(categoryName);
-            category.setCategoryDescription(categoryDescription);
-            categoryRepository.saveAndFlush(category);
+
+            objectCategory.setCategoryName(categoryName);
+            objectCategory.setCategoryDescription(categoryDescription);
+            categoryRepository.saveAndFlush(objectCategory);
         }
 
 
